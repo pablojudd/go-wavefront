@@ -15,7 +15,7 @@ type Dashboard struct {
 	ID string `json:"id"`
 
 	// Tags are the tags applied to the Dashboard
-	Tags []string
+	Tags []string `json:"tags"`
 
 	// Description is a description given to the Dashboard
 	Description string `json:"description"`
@@ -26,9 +26,35 @@ type Dashboard struct {
 	// Sections is an array of Section that split up the dashboard
 	Sections []Section `json:"sections"`
 
+	// More dashboard settings (TODO: decriptions)
+	ChartTitleBgColor             string `json:"chartTitleBgColor,omitempty"`
+	ChartTitleColor               string `json:"chartTitleColor,omitempty"`
+	ChartTitleScalar              int    `json:"chartTitleScalar,omitempty"`
+	Customer                      string `json:"customer"`
+	DefaultEndTime                int    `json:"defaultEndTime,omitempty"`
+	DefaultStartTime              int    `json:"defaultStartTime,omitempty"`
+	DefaultTimeWindow             string `json:"defaultTimeWindow"`
+	Deleted                       bool   `json:"deleted"`
+	DisplayDescription            bool   `json:"displayDescription"`
+	DisplayQueryParameters        bool   `json:"displayQueryParameters"`
+	DisplaySectionTableOfContents bool   `json:"displaySectionTableOfContents"`
+	EventFilterType               string `json:"eventFilterType"`
+	EventQuery                    string `json:"eventQuery"`
+	Favorite                      bool   `json:"favorite"`
+	Hidden                        bool   `json:"hidden"`
+	NumCharts                     int    `json:"numCharts"`
+	NumFavorites                  int    `json:"numFavorites"`
+	SystemOwned                   bool   `json:"systemOwned"`
+
+	// Parameters sets variables (TODO: for what?)
+	Parameters Parameter `json:"parameters"`
+	
 	// ParameterDetails sets variables that can be used within queries
 	ParameterDetails map[string]ParameterDetail `json:"parameterDetails"`
 }
+
+// Parameter represents a parameter in dashboard (TODO: why?)
+type Parameter struct {}
 
 // ParameterDetail represents a parameter to dashboard that can be consumed in queries
 type ParameterDetail struct {
@@ -71,6 +97,9 @@ type Row struct {
 	// Name represents the display name of the Row
 	Name string `json:"name"`
 
+	// HeightFactor  represents the height of the Row
+	HeightFactor int `json:"heightFactor"`
+
 	// Charts is an array of Chart that this row contains
 	Charts []Chart `json:"charts"`
 }
@@ -83,11 +112,21 @@ type Chart struct {
 	// Description is the description of the chart
 	Description string `json:"description"`
 
+	// More settings (TODO: decriptions)
+	Base                   int    `json:"base"`
+	IncludeObsoleteMetrics bool   `json:"includeObsoleteMetrics"`
+	InterpolatePoints      bool   `json:"interpolatePoints"`
+	NoDefaultEvents        bool   `json:"noDefaultEvents"`
+	Summarization          string `json:"summarization"`
+
 	// Sources is an Array of Source
 	Sources []Source `json:"sources"`
 
 	// Units are the units to use for the y axis
 	Units string `json:"units,omitempty"`
+
+	// ChartSettings are custom settings for the chart
+	ChartSettings ChartSetting `json:"chartSettings"`
 }
 
 // Source represents a single Source for a Chart
@@ -109,6 +148,67 @@ type Source struct {
 
 	// SourceDescription
 	SourceDescription string `json:"sourceDescription"`
+}
+
+// ChartSetting represents settings for a Chart
+type ChartSetting struct {
+	AutoColumnTags                     bool     `json:"autoColumnTags,omitempty"`
+	ColumnTags                         string   `json:"columnTags,omitempty"`
+	CustomTags                         []string `json:"customTags,omitempty"`
+	ExpectedDataSpacing                int      `json:"expectedDataSpacing,omitempty"`
+	FixedLegendDisplayStats            []string `json:"fixedLegendDisplayStats,omitempty"`
+	FixedLegendEnabled                 bool     `json:"fixedLegendEnabled,omitempty"`
+	FixedLegendFilterField             string   `json:"fixedLegendFilterField,omitempty"`
+	FixedLegendFilterLimit             int      `json:"fixedLegendFilterLimit,omitempty"`
+	FixedLegendFilterSort              string   `json:"fixedLegendFilterSort,omitempty"`
+	FixedLegendHideLabel               bool     `json:"fixedLegendHideLabel,omitempty"`
+	FixedLegendPosition                string   `json:"fixedLegendPosition,omitempty"`
+	FixedLegendUseRawStats             bool     `json:"fixedLegendUseRawStats,omitempty"`
+	GroupBySource                      bool     `json:"groupBySource,omitempty"`
+	InvertDynamicLegendHoverControl    bool     `json:"invertDynamicLegendHoverControl,omitempty"`
+	LineType                           string   `json:"lineType,omitempty"`
+	Max                                float32  `json:"max,omitempty"`
+	Min                                float32  `json:"min,omitempty"`
+	NumTags                            int      `json:"numTags,omitempty"`
+	PlainMarkdownContent               string   `json:"plainMarkdownContent,omitempty"`
+	ShowHosts                          bool     `json:"showHosts,omitempty"`
+	ShowLabels                         bool     `json:"showLabels,omitempty"`
+	ShowRawValues                      bool     `json:"showRawValues,omitempty"`
+	SortValuesDescending               bool     `json:"sortValuesDescending,omitempty"`
+	SparklineDecimalPrecision          int      `json:"sparklineDecimalPrecision,omitempty"`
+	SparklineDisplayColor              string   `json:"sparklineDisplayColor,omitempty"`
+	SparklineDisplayFontSize           string   `json:"sparklineDisplayFontSize,omitempty"`
+	SparklineDisplayHorizontalPosition string   `json:"sparklineDisplayHorizontalPosition,omitempty"`
+	SparklineDisplayPostfix            string   `json:"sparklineDisplayPostfix,omitempty"`
+	SparklineDisplayPrefix             string   `json:"sparklineDisplayPrefix,omitempty"`
+	SparklineDisplayValueType          string   `json:"sparklineDisplayValueType,omitempty"`
+	SparklineDisplayVerticalPosition   string   `json:"sparklineDisplayVerticalPosition,omitempty"`
+	SparklineFillColor                 string   `json:"sparklineFillColor,omitempty"`
+	SparklineLineColor                 string   `json:"sparklineLineColor,omitempty"`
+	SparklineSize                      string   `json:"sparklineSize,omitempty"`
+	SparklineValueColorMapApplyTo      string   `json:"sparklineValueColorMapApplyTo,omitempty"`
+	SparklineValueColorMapColors       []string `json:"sparklineValueColorMapColors,omitempty,omitempty"`
+	SparklineValueColorMapValues       []int    `json:"sparklineValueColorMapValues,omitempty,omitempty"`
+	SparklineValueColorMapValuesV2     []int    `json:"sparklineValueColorMapValuesV2,omitempty,omitempty"`
+	SparklineValueTextMapText          []string `json:"sparklineValueTextMapText,omitempty,omitempty"`
+	SparklineValueTextMapThresholds    []int    `json:"sparklineValueTextMapThresholds,omitempty,omitempty"`
+	StackType                          string   `json:"stackType,omitempty"`
+	TagMode                            string   `json:"tagMode,omitempty"`
+	TimeBasedColoring                  bool     `json:"timeBasedColoring,omitempty"`
+	Type                               string   `json:"type,omitempty"`
+	Windowing                          string   `json:"windowing,omitempty"`
+	WindowSize                         int      `json:"windowSize,omitempty"`
+	Xmax                               float32  `json:"xmax,omitempty"`
+	Xmin                               float32  `json:"xmin,omitempty"`
+	Y0ScaleSIBy1024                    bool     `json:"y0ScaleSIBy1024,omitempty"`
+	Y0UnitAutoscaling                  bool     `json:"y0UnitAutoscaling,omitempty"`
+	Y1Max                              float32  `json:"y1Max,omitempty"`
+	Y1Min                              float32  `json:"y1Min,omitempty"`
+	Y1ScaleSIBy1024                    bool     `json:"y1ScaleSIBy1024,omitempty"`
+	Y1UnitAutoscaling                  bool     `json:"y1UnitAutoscaling,omitempty"`
+	Y1Units                            string   `json:"y1Units,omitempty"`
+	Ymax                               float32  `json:"ymax,omitempty"`
+	Ymin                               float32  `json:"ymin,omitempty"`
 }
 
 // Dashboards is used to perform Dashboard-related operations against the Wavefront API
